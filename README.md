@@ -13,7 +13,7 @@ Projeto da disciplina de Desenvolvimento de Software, com foco em funcionalidade
 
 ---
 
-## ⚙️ Funcionalidades
+## Funcionalidades
 - **AC1**: Criar e listar chamados  
 - **AC2**: Atualizar status  
 - **AC3**: Excluir chamado / filtro por status  
@@ -21,7 +21,7 @@ Projeto da disciplina de Desenvolvimento de Software, com foco em funcionalidade
 
 ---
 
-## 🚀 Como executar
+## Como executar
 1. Clonar repositório:
    ```bash
    git clone https://github.com/abarros0/Controle-chamados.git
