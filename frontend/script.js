@@ -37,15 +37,17 @@ document.getElementById("formChamado").addEventListener("submit", async (e) => {
   const titulo = document.getElementById("titulo").value;
   const descricao = document.getElementById("descricao").value;
 
-  await fetch(API_URL, {
+  await fetch("http://localhost:3000/chamados", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ titulo, descricao })
   });
 
+  // Limpa o formulário
   document.getElementById("titulo").value = "";
   document.getElementById("descricao").value = "";
+
+  // Recarrega a lista
   carregarChamados();
 });
 
-carregarChamados();
