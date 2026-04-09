@@ -5,16 +5,18 @@ const pool = require('../db');
 // Criar chamado
 router.post('/', async (req, res) => {
   const { titulo, descricao } = req.body;
+
   try {
     const [result] = await pool.query(
-      'INSERT INTO chamados (titulo, descricao) VALUES (?, ?)',
-      [titulo, descricao]
+      'INSERT INTO chamados (titulo, descricao, status) VALUES (?, ?, ?)',
+      [titulo, descricao, 'Aberto']
     );
+
     res.status(201).json({
       id: result.insertId,
       titulo,
       descricao,
-      status: "Aberto"
+      status: 'Aberto'
     });
   } catch (err) {
     res.status(500).json({ erro: err.message });
@@ -31,4 +33,22 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Atualizar status do chamado
+router.put('/:id/status', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    await pool.query(
+      'UPDATE chamados SET status = ? WHERE id = ?',
+      [status, id]
+    );
+
+    res.json({ mensagem: 'Status atualizado com sucesso' });
+  } catch (err) {
+    res.status(500).json({ erro: err.message });
+  }
+});
+
 module.exports = router;
+``

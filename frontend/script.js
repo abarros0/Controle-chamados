@@ -1,3 +1,4 @@
+
 const API_URL = "http://localhost:3000/chamados";
 
 async function carregarChamados() {
@@ -8,7 +9,22 @@ async function carregarChamados() {
 
   chamados.forEach(c => {
     const li = document.createElement("li");
-    li.textContent = `${c.id} - ${c.titulo} (${c.status})`;
+
+    // Texto do chamado
+    const texto = document.createElement("span");
+    texto.textContent = `${c.id} - ${c.titulo} `;
+
+    // Select de status
+    const select = document.createElement("select");
+    ["Aberto", "Em andamento", "Finalizado"].forEach(status => {
+      const option = document.createElement("option");
+      option.value = status;
+      option.textContent = status;
+      if (c.status === status) option.selected = true;
+      select.appendChild(option);
+    });
+
+    select.onchange = () => atualizarStatus(c.id, select.value);
 
     // Botão Editar
     const editBtn = document.createElement("button");
@@ -26,28 +42,44 @@ async function carregarChamados() {
       alert("Função de excluir será implementada.");
     };
 
+    li.appendChild(texto);
+    li.appendChild(select);
     li.appendChild(editBtn);
     li.appendChild(deleteBtn);
     lista.appendChild(li);
   });
 }
 
-document.getElementById("formChamado").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const titulo = document.getElementById("titulo").value;
-  const descricao = document.getElementById("descricao").value;
+// Criar chamado
+document
+  .getElementById("formChamado")
+  .addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  await fetch("http://localhost:3000/chamados", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ titulo, descricao })
+    const titulo = document.getElementById("titulo").value;
+    const descricao = document.getElementById("descricao").value;
+
+    await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ titulo, descricao })
+    });
+
+    document.getElementById("titulo").value = "";
+    document.getElementById("descricao").value = "";
+
+    carregarChamados();
   });
 
-  // Limpa o formulário
-  document.getElementById("titulo").value = "";
-  document.getElementById("descricao").value = "";
-
-  // Recarrega a lista
+// Atualiza Status dos chamados
+async function atualizarStatus(id, status) {
+  await fetch(`${API_URL}/${id}/status`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status })
+  });
   carregarChamados();
-});
+}
 
+// Carrega ao abrir a página
+carregarChamados();

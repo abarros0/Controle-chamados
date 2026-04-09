@@ -3,7 +3,7 @@ const mysql = require('mysql2/promise');
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'amanda',       // 
-  password: 'Lara2019*', //
+  password: '', // configurar localmente
   database: 'controle_chamados'
 });
 
