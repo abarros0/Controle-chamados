@@ -8,8 +8,8 @@ router.post('/', async (req, res) => {
 
   try {
     const [result] = await pool.query(
-      'INSERT INTO chamados (titulo, descricao, status) VALUES (?, ?, ?)',
-      [titulo, descricao, 'Aberto']
+      "INSERT INTO chamados (titulo, descricao, status, data_abertura) VALUES (?, ?, ?, NOW())",
+      [titulo, descricao, "Aberto"]
     );
 
     res.status(201).json({
@@ -19,6 +19,7 @@ router.post('/', async (req, res) => {
       status: 'Aberto'
     });
   } catch (err) {
+    console.error("Erro ao abrir chamado:", err);
     res.status(500).json({ erro: err.message });
   }
 });
@@ -29,6 +30,7 @@ router.get('/', async (req, res) => {
     const [rows] = await pool.query('SELECT * FROM chamados');
     res.json(rows);
   } catch (err) {
+    console.error("Erro ao listar chamados:", err);
     res.status(500).json({ erro: err.message });
   }
 });
@@ -46,9 +48,9 @@ router.put('/:id/status', async (req, res) => {
 
     res.json({ mensagem: 'Status atualizado com sucesso' });
   } catch (err) {
+    console.error("Erro ao atualizar status:", err);
     res.status(500).json({ erro: err.message });
   }
 });
 
 module.exports = router;
-``
