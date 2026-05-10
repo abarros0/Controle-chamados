@@ -24,10 +24,22 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Listar chamados
+// Listar chamados (com filtro opcional por status)
 router.get('/', async (req, res) => {
+  const { status } = req.query;
+
   try {
-    const [rows] = await pool.query('SELECT * FROM chamados');
+    let query = 'SELECT * FROM chamados';
+    const params = [];
+
+    if (status && status !== 'Todos') {
+      query += ' WHERE status = ?';
+      params.push(status);
+    }
+
+    query += ' ORDER BY data_abertura DESC';
+
+    const [rows] = await pool.query(query, params);
     res.json(rows);
   } catch (err) {
     console.error("Erro ao listar chamados:", err);
@@ -49,6 +61,27 @@ router.put('/:id/status', async (req, res) => {
     res.json({ mensagem: 'Status atualizado com sucesso' });
   } catch (err) {
     console.error("Erro ao atualizar status:", err);
+    res.status(500).json({ erro: err.message });
+  }
+});
+
+// Excluir chamado
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const [result] = await pool.query(
+      'DELETE FROM chamados WHERE id = ?',
+      [id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ erro: 'Chamado não encontrado' });
+    }
+
+    res.json({ mensagem: 'Chamado excluído com sucesso' });
+  } catch (err) {
+    console.error("Erro ao excluir chamado:", err);
     res.status(500).json({ erro: err.message });
   }
 });

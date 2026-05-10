@@ -11,7 +11,7 @@ body {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  width: 500px;
+  width: 600px;
 }
 
 h1, h2 {
@@ -45,6 +45,27 @@ button:hover {
   background: #45a049;
 }
 
+/* Filtro */
+.filtro-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.filtro-container label {
+  font-weight: bold;
+  color: #555;
+}
+
+.filtro-container select {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Lista */
 ul {
   list-style: none;
   padding: 0;
@@ -52,28 +73,61 @@ ul {
 
 li {
   background: #eee;
-  margin-bottom: 8px;
-  padding: 10px;
+  margin-bottom: 10px;
+  padding: 12px;
   border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
 }
-.edit-btn {
-  background: #2196F3;
-  color: white;
-  margin-left: 10px;
-  border: none;
-  padding: 5px 10px;
+
+.chamado-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.chamado-info strong {
+  font-size: 15px;
+  color: #222;
+}
+
+.chamado-info .descricao {
+  font-size: 13px;
+  color: #555;
+}
+
+.chamado-info .data {
+  font-size: 11px;
+  color: #999;
+}
+
+.acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+.acoes select {
+  padding: 5px 8px;
+  border: 1px solid #ccc;
   border-radius: 4px;
   cursor: pointer;
 }
-.edit-btn:hover { background: #1976D2; }
 
 .delete-btn {
   background: #f44336;
   color: white;
-  margin-left: 5px;
   border: none;
-  padding: 5px 10px;
+  padding: 5px 12px;
   border-radius: 4px;
   cursor: pointer;
+  font-size: 13px;
 }
-.delete-btn:hover { background: #d32f2f; }
+
+.delete-btn:hover {
+  background: #d32f2f;
+}

@@ -8,12 +8,25 @@
 <body>
   <div class="container">
     <h1>Controle de Chamados</h1>
+
     <form id="formChamado">
       <input type="text" id="titulo" placeholder="Título do chamado" required>
       <textarea id="descricao" placeholder="Descrição" required></textarea>
       <button type="submit">Abrir Chamado</button>
     </form>
+
     <h2>Lista de Chamados</h2>
+
+    <div class="filtro-container">
+      <label for="filtroStatus">Filtrar por status:</label>
+      <select id="filtroStatus">
+        <option value="Todos">Todos</option>
+        <option value="Aberto">Aberto</option>
+        <option value="Em andamento">Em andamento</option>
+        <option value="Finalizado">Finalizado</option>
+      </select>
+    </div>
+
     <ul id="listaChamados"></ul>
   </div>
   <script src="script.js"></script>
