@@ -65,6 +65,32 @@ router.put('/:id/status', async (req, res) => {
   }
 });
 
+// Editar chamado (título e descrição)
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { titulo, descricao } = req.body;
+
+  if (!titulo || !descricao) {
+    return res.status(400).json({ erro: 'Título e descrição são obrigatórios' });
+  }
+
+  try {
+    const [result] = await pool.query(
+      'UPDATE chamados SET titulo = ?, descricao = ? WHERE id = ?',
+      [titulo, descricao, id]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ erro: 'Chamado não encontrado' });
+    }
+
+    res.json({ mensagem: 'Chamado atualizado com sucesso' });
+  } catch (err) {
+    console.error("Erro ao editar chamado:", err);
+    res.status(500).json({ erro: err.message });
+  }
+});
+
 // Excluir chamado
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
