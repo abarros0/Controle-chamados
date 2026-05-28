@@ -2,33 +2,118 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Sistema de Controle de Chamados</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle de Chamados</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Controle de Chamados</h1>
 
-    <form id="formChamado">
-      <input type="text" id="titulo" placeholder="Título do chamado" required>
-      <textarea id="descricao" placeholder="Descrição" required></textarea>
-      <button type="submit">Abrir Chamado</button>
-    </form>
-
-    <h2>Lista de Chamados</h2>
-
-    <div class="filtro-container">
-      <label for="filtroStatus">Filtrar por status:</label>
-      <select id="filtroStatus">
-        <option value="Todos">Todos</option>
-        <option value="Aberto">Aberto</option>
-        <option value="Em andamento">Em andamento</option>
-        <option value="Finalizado">Finalizado</option>
-      </select>
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="8" fill="#2563EB"/>
+        <path d="M7 10h14M7 14h10M7 18h12" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>Chamados</span>
     </div>
 
-    <ul id="listaChamados"></ul>
-  </div>
+    <nav class="sidebar-nav">
+      <a href="#" class="nav-item active">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Painel
+      </a>
+      <a href="#" class="nav-item">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Chamados
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="avatar">US</div>
+      <div class="user-info">
+        <span class="user-name">Usuário</span>
+        <span class="user-role">Suporte</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <header class="topbar">
+      <div>
+        <h1 class="page-title">Painel de Chamados</h1>
+        <p class="page-sub">Gerencie e acompanhe os chamados em tempo real</p>
+      </div>
+      <button class="btn-primary" id="btnNovoChamado">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Novo Chamado
+      </button>
+    </header>
+
+    <section class="stats-row">
+      <div class="stat-card">
+        <span class="stat-label">Total</span>
+        <span class="stat-value" id="statTotal">—</span>
+      </div>
+      <div class="stat-card aberto">
+        <span class="stat-label">Abertos</span>
+        <span class="stat-value" id="statAberto">—</span>
+      </div>
+      <div class="stat-card andamento">
+        <span class="stat-label">Em andamento</span>
+        <span class="stat-value" id="statAndamento">—</span>
+      </div>
+      <div class="stat-card finalizado">
+        <span class="stat-label">Finalizados</span>
+        <span class="stat-value" id="statFinalizado">—</span>
+      </div>
+    </section>
+
+    <section class="toolbar">
+      <div class="search-wrap">
+        <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="busca" class="search-input" placeholder="Buscar chamado…">
+      </div>
+      <div class="filter-tabs" id="filterTabs">
+        <button class="filter-tab active" data-status="Todos">Todos</button>
+        <button class="filter-tab" data-status="Aberto">Aberto</button>
+        <button class="filter-tab" data-status="Em andamento">Em andamento</button>
+        <button class="filter-tab" data-status="Finalizado">Finalizado</button>
+      </div>
+    </section>
+
+    <div class="chamados-grid" id="listaChamados"></div>
+
+  </main>
+
+  <!-- Drawer: Novo Chamado / Editar -->
+  <div class="drawer-overlay" id="drawerOverlay"></div>
+  <aside class="drawer" id="drawer">
+    <div class="drawer-header">
+      <h2 class="drawer-title" id="drawerTitle">Novo Chamado</h2>
+      <button class="btn-icon" id="btnFecharDrawer" aria-label="Fechar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <input type="hidden" id="editId">
+      <div class="field">
+        <label class="field-label">Título</label>
+        <input type="text" id="editTitulo" class="field-input" placeholder="Ex: Erro ao fazer login">
+      </div>
+      <div class="field">
+        <label class="field-label">Descrição</label>
+        <textarea id="editDescricao" class="field-textarea" placeholder="Descreva o problema com detalhes…"></textarea>
+      </div>
+    </div>
+    <div class="drawer-footer">
+      <button class="btn-ghost" id="btnCancelarDrawer">Cancelar</button>
+      <button class="btn-primary" id="btnSalvarDrawer">Salvar chamado</button>
+    </div>
+  </aside>
+
   <script src="script.js"></script>
 </body>
 </html>
